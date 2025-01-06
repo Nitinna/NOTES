@@ -164,4 +164,100 @@ parsed_iso = datetime.fromisoformat(iso_format)
 
 ---
 
+
+Pandas mein datetime series ke saath kaafi useful operations kar sakte hain, jo time series data ke saath kaam karte waqt kaafi madadgar hote hain. Yeh kuch common operations hain jo aap pandas mein perform kar sakte hain:
+
+### 1. **Datetime ko `datetime` Type Mein Convert Karna**
+Agar aapke paas date strings hain aur aap unhe `datetime` type mein convert karna chahte hain, toh aap `pd.to_datetime()` ka use kar sakte hain:
+```python
+import pandas as pd
+
+# Example data
+data = {'dates': ['2025-01-01', '2025-01-02', '2025-01-03']}
+df = pd.DataFrame(data)
+
+# Convert to datetime
+df['dates'] = pd.to_datetime(df['dates'])
+```
+
+### 2. **Date/Time Components Nikaalna**
+Datetime series ke saath aap year, month, day, hour, minute, second, etc. easily extract kar sakte hain:
+```python
+# Extract components
+df['year'] = df['dates'].dt.year
+df['month'] = df['dates'].dt.month
+df['day'] = df['dates'].dt.day
+df['hour'] = df['dates'].dt.hour
+df['minute'] = df['dates'].dt.minute
+df['second'] = df['dates'].dt.second
+```
+
+### 3. **Datetime Index Set Karna**
+Datetime column ko DataFrame ka index banane ke liye `.set_index()` ka use kar sakte hain:
+```python
+df.set_index('dates', inplace=True)
+```
+
+### 4. **Resampling**
+Aap data ko kisi specific frequency (jaise daily, monthly) pe resample kar sakte hain using `.resample()` method:
+```python
+# Resample to daily frequency and take the mean
+df_resampled = df.resample('D').mean()
+```
+
+### 5. **Time Shifting**
+Aap datetime series ko shift kar sakte hain (positive for future, negative for past) using `.shift()` method:
+```python
+# Shift data by 1 day forward
+df['shifted'] = df['dates'].shift(1, freq='D')
+```
+
+### 6. **Date Range Generate Karna**
+Agar aapko specific range ke dates generate karne hain, toh `pd.date_range()` use kar sakte hain:
+```python
+# Generate a date range
+date_range = pd.date_range('2025-01-01', periods=5, freq='D')
+```
+
+### 7. **Time Differences**
+Aap datetime objects ke beech ka time difference nikaal sakte hain:
+```python
+# Example data
+df2 = pd.DataFrame({'dates': ['2025-01-02', '2025-01-04']})
+df2['dates'] = pd.to_datetime(df2['dates'])
+
+# Time difference
+df['time_diff'] = df2['dates'] - df['dates']
+```
+
+### 8. **Date Arithmetic**
+Datetime objects ke saath arithmetic operations perform kar sakte hain, jaise ki time add ya subtract karna:
+```python
+# Add 1 day to the datetime column
+df['new_date'] = df['dates'] + pd.Timedelta(days=1)
+```
+
+### 9. **Date ke Basis Pe Filter Karna**
+Datetime column ke basis pe aap specific dates ko filter kar sakte hain:
+```python
+# Filter by a specific year
+df_filtered = df[df['dates'].dt.year == 2025]
+```
+
+### 10. **Timezones Handle Karna**
+Datetime ko different timezones mein convert kar sakte hain using `.dt.tz_convert()`:
+```python
+# Convert to a specific timezone
+df['dates'] = df['dates'].dt.tz_localize('UTC').dt.tz_convert('US/Eastern')
+```
+
+### 11. **Timedelta Ka Use**
+`Timedelta` objects ko create karke aap datetime ke saath duration-related operations perform kar sakte hain:
+```python
+# Subtract a timedelta from datetime
+df['dates_minus_timedelta'] = df['dates'] - pd.Timedelta(days=1)
+```
+
+Yeh operations aapko pandas mein datetime data ko manipulate aur analyze karne mein kaafi madadgar hote hain.
+
 This cheat sheet covers all essential features of the `datetime` library. Let me know if you need deeper examples or explanations!
